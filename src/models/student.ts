@@ -10,9 +10,6 @@ const StudentSchema=new Schema<Student>({
         type:String,
         required:true,
     },
-    subjects:{
-        type:[String],
-    },
     semmester:{
         type:Number,
         required:true,
@@ -21,6 +18,10 @@ const StudentSchema=new Schema<Student>({
         type:Number,
         required:true,
     },
+    subjects:{
+        type:[Schema.Types.ObjectId],
+        ref:'subjects'
+    },
 },
     {
         timestamps:true,
@@ -28,5 +29,5 @@ const StudentSchema=new Schema<Student>({
     }
 );
 
-const StudentModel=model("students",StudentSchema);
+const StudentModel=model('students',StudentSchema);
 export default StudentModel;

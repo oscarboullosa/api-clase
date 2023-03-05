@@ -6,9 +6,6 @@ const SubjectSchema=new Schema<Subject>({
         type:String,
         required:true,
     },
-    students:{
-        type:[String],
-    },
     semmester:{
         type:Number,
         required:true,
@@ -17,6 +14,10 @@ const SubjectSchema=new Schema<Subject>({
         type:String,
         enum:["easy","medium","hard"],
     },
+    person:{
+        type: [Schema.Types.ObjectId],
+        ref:'students'
+    },
 },
     {
         timestamps:true,
@@ -24,5 +25,5 @@ const SubjectSchema=new Schema<Subject>({
     }
 );
 
-const SubjectModel=model("subjects",SubjectSchema);
+const SubjectModel=model('subjects',SubjectSchema);
 export default SubjectModel;

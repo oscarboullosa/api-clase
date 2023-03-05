@@ -1,5 +1,7 @@
 import { Subject } from "../interfaces/subject.interface";
 import SubjectModel from "../models/subject";
+import StudentModel from "../models/student";
+import { Types } from "mongoose";
 
 const insertSubject=async(item:Subject)=>{
     const responseInsert=await SubjectModel.create(item);
@@ -11,14 +13,14 @@ const getSubjects=async()=>{
     return responseItem;
 };
 
-const getSubject=async(id:string)=>{
-    const responseItem=await SubjectModel.findOne({_id:id});
+const getSubject=async(idSubject:string)=>{
+    const responseItem=await SubjectModel.findOne({_id:idSubject});
     return responseItem;
 };
 
-const updateSubject=async(id:string,data:Subject)=>{
+const updateSubject=async(idSubject:string,data:Subject)=>{
     const responseItem=await SubjectModel.findOneAndUpdate(
-        {_id:id},
+        {_id:idSubject},
         data,
         {
             new:true,
@@ -27,8 +29,11 @@ const updateSubject=async(id:string,data:Subject)=>{
     return responseItem;
 };
 
-const deleteSubject=async(id:string)=>{
-    const responseItem=await SubjectModel.deleteOne({_id:id});
+const deleteSubject=async(idSubject:string)=>{
+    const responseItem=await SubjectModel.deleteOne({_id:idSubject});
     return responseItem;
 }
-export {insertSubject,getSubject,getSubjects,updateSubject,deleteSubject};
+const addSubjectToUser=async(idSubject:string,idUser:string)=>{
+    const responseItem=await StudentModel.findOneAndUpdate({_id:idSubject},{$addToSet:{subjects:new Types.ObjectId(idSubject)}},{new:true}).populate('subjects');
+}
+export {insertSubject,getSubject,getSubjects,updateSubject,deleteSubject,addSubjectToUser};

@@ -1,6 +1,7 @@
+import { ObjectId } from "mongoose";
 export interface Subject{
     name:string;
-    students:string[];
+    person:ObjectId[];
     semmester:number;
     difficulty:"easy"|"medium"|"hard";
 }

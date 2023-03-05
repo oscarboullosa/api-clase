@@ -1,11 +1,11 @@
 import { Request,Response } from "express";
-import { insertStudent,getStudent,getStudents,updateStudent,deleteStudent } from "../services/student";
+import { insertStudent,getStudent,getStudents,updateStudent,deleteStudent,addUserToSubject } from "../services/student";
 import { handleHttp } from "../utils/error.handle";
 
 const getPerson=async({params}:Request,res:Response)=>{
     try{
-        const{id}=params;
-        const response=await getStudent(id);
+        const{idUser}=params;
+        const response=await getStudent(idUser);
         const data =response ? response:"NOT_FOUND";
         console.log(data);
         res.send(data);
@@ -25,8 +25,8 @@ const getPeople=async(req:Request,res:Response)=>{
 
 const updatePerson=async ({params,body}:Request,res:Response)=>{
 try {
-        const {id}=params;
-        const response=await updateStudent(id,body);
+        const {idUser}=params;
+        const response=await updateStudent(idUser,body);
         res.send(response);
 } catch (e) {
     handleHttp(res,"ERROR_UPDATE_ITEM");
@@ -46,11 +46,20 @@ const postPerson=async ({body}:Request,res:Response)=>{
 
 const deletePerson=async ({params}:Request,res:Response)=>{
     try{
-        const {id}=params;
-        const response=await deleteStudent(id);
+        const {idUser}=params;
+        const response=await deleteStudent(idUser);
         res.send(response);
     } catch(e){
         handleHttp(res,"ERROR_DELETE_ITEM");
     }
 };
-export{getPerson,getPeople,postPerson,updatePerson,deletePerson};
+const addPersonToSubject=async(req:Request,res:Response)=>{
+    try {
+        const { idUser, idSubject } = req.body;
+        const response=await addUserToSubject(idSubject,idUser);
+            res.send(response);
+    } catch (e) {
+        handleHttp(res,"ERROR_ADD_USER_TO_SUBJECT");
+    }
+}
+export{getPerson,getPeople,postPerson,updatePerson,deletePerson,addPersonToSubject};

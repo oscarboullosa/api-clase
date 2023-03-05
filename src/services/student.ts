@@ -1,5 +1,7 @@
 import { Student } from "../interfaces/student.interface";
 import StudentModel from "../models/student";
+import SubjectModel from "../models/subject";
+import { Types } from "mongoose";
 
 //En Students me interesa más pasarle el ID porque pueden haber 2 estudiantes con el mismo nombre
 const insertStudent=async(item:Student)=>{
@@ -12,14 +14,14 @@ const getStudents=async()=>{
     return responseItem;
 };
 
-const getStudent=async(id:string)=>{
-    const responseItem=await StudentModel.findOne({_id:id});
+const getStudent=async(idUser:string)=>{
+    const responseItem=await StudentModel.findOne({_id:idUser});
     return responseItem;
 };
 
-const updateStudent=async(id:string,data:Student)=>{
+const updateStudent=async(idUser:string,data:Student)=>{
     const responseItem=await StudentModel.findOneAndUpdate(
-        {_id:id},
+        {_id:idUser},
         data,
         {
             new:true,
@@ -28,9 +30,13 @@ const updateStudent=async(id:string,data:Student)=>{
     return responseItem;
 };
 
-const deleteStudent=async(id:string)=>{
+const deleteStudent=async(idUser:string)=>{
     //const responseItem=await StudentModel.remove({_name:name});
-    const responseItem=await StudentModel.deleteOne({_id:id});
+    const responseItem=await StudentModel.deleteOne({_id:idUser});
     return responseItem;
-}
-export {insertStudent,getStudent,getStudents,updateStudent,deleteStudent};
+};
+const addUserToSubject = async(idSubject: string, idUser: string) => {
+    const responseItem = await SubjectModel.findOneAndUpdate({_id: idUser}, {$addToSet: {person: new Types.ObjectId(idUser)}}, {new: true}).populate('person');
+    return responseItem;
+};
+export {insertStudent,getStudent,getStudents,updateStudent,deleteStudent,addUserToSubject};
